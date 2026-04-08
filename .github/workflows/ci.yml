@@ -1,6 +1,6 @@
 on:
   push:
-    branches: [ main, master, develop, feature/home ]
+    branches: [ main, master, develop, feature/home, feature/login ]
   pull_request:
     branches: [ main, master, develop ]
 
@@ -21,8 +21,7 @@ jobs:
     - name: Install dependencies
       run: |
         cd frontend
-        rm -rf node_modules package-lock.json
-        npm install --no-cache
+        npm ci
     
     - name: Build application
       run: |
