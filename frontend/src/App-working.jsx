@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
-import SignIn from './SignIn';
-import Register from './Register';
 
-export default function App() {
-  const [currentPage, setCurrentPage] = useState('home');
+export default function HomePage() {
   const [activeTab, setActiveTab] = useState('Dashboard');
 
   const handleNavClick = (tab) => {
@@ -24,22 +21,9 @@ export default function App() {
   };
 
   const handleSignIn = () => {
-    setCurrentPage('signin');
+    // Simple login simulation
+    alert('Login functionality would connect to backend here');
   };
-
-  const handleRegister = () => {
-    setCurrentPage('register');
-  };
-
-  // Show Sign-In page
-  if (currentPage === 'signin') {
-    return <SignIn setCurrentPage={setCurrentPage} />;
-  }
-
-  // Show Register page
-  if (currentPage === 'register') {
-    return <Register setCurrentPage={setCurrentPage} />;
-  }
 
   return (
     <div style={{ backgroundColor: '#6a0dad', minHeight: '100vh', padding: '20px' }}>

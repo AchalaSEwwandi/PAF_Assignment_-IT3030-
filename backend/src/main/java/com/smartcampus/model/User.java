@@ -18,9 +18,15 @@ public class User {
 
     public enum Role {
         STUDENT,
-        STAFF,
+        LECTURER,
         TECHNICIAN,
         ADMIN
+    }
+
+    public enum Status {
+        PENDING,
+        ACTIVE,
+        REJECTED
     }
 
     @Id
@@ -39,9 +45,15 @@ public class User {
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
+    @Column(name = "google_id", length = 255)
+    private String googleId;
+
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 30)
     private Role role;
+
+    @Column(name = "status", nullable = false, length = 20)
+    private Status status = Status.PENDING;
 
     @Column(name = "is_active", nullable = false)
     private Boolean active = true;
@@ -102,6 +114,22 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public String getGoogleId() {
+        return googleId;
+    }
+
+    public void setGoogleId(String googleId) {
+        this.googleId = googleId;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     public Boolean getActive() {
