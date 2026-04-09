@@ -91,7 +91,7 @@ export default function AdminDashboard({ setCurrentPage }) {
         
         {/* Logo Section */}
         <div className="px-6 flex items-center gap-3 mb-8 cursor-pointer">
-          <div className="w-10 h-10 rounded-lg bg-[#22c55e] flex items-center justify-center">
+          <div className="w-10 h-10 rounded-lg bg-[#6a0dad] flex items-center justify-center">
             <BiBuildingHouse size={22} className="text-white" />
           </div>
           <div>
@@ -103,12 +103,12 @@ export default function AdminDashboard({ setCurrentPage }) {
         {/* Profile Card */}
         <div className="px-5 mb-8">
           <div className="bg-[#2a2a2d] rounded-xl p-3 flex items-center gap-3 border border-[#3f3f46]">
-            <div className="w-10 h-10 rounded-full bg-[#8b5cf6] flex items-center justify-center text-white font-bold text-lg">
+            <div className="w-10 h-10 rounded-full bg-[#6a0dad] flex items-center justify-center text-white font-bold text-lg">
               {initial}
             </div>
             <div className="overflow-hidden">
               <p className="font-medium text-sm truncate">{fullName}</p>
-              <p className="text-[#8b5cf6] text-xs font-semibold">Administrator</p>
+              <p className="text-[#6a0dad] text-xs font-semibold">Administrator</p>
             </div>
           </div>
         </div>
@@ -120,7 +120,7 @@ export default function AdminDashboard({ setCurrentPage }) {
               <button
                 onClick={() => setActiveTab('Dashboard')}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-                  activeTab === 'Dashboard' ? 'bg-[#2a2a2d] text-white font-semibold shadow-sm' : 'text-[#a1a1aa] hover:text-white hover:bg-[#2a2a2d]/50'
+                  activeTab === 'Dashboard' ? 'bg-[#6a0dad] text-white font-semibold shadow-sm' : 'text-[#a1a1aa] hover:text-white hover:bg-[#2a2a2d]/50'
                 }`}
               >
                 <FiGrid size={18} />
@@ -131,7 +131,7 @@ export default function AdminDashboard({ setCurrentPage }) {
               <button
                 onClick={() => setActiveTab('Manage Users')}
                 className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all ${
-                  activeTab === 'Manage Users' ? 'bg-[#2a2a2d] text-white font-semibold shadow-sm' : 'text-[#a1a1aa] hover:text-white hover:bg-[#2a2a2d]/50'
+                  activeTab === 'Manage Users' ? 'bg-[#6a0dad] text-white font-semibold shadow-sm' : 'text-[#a1a1aa] hover:text-white hover:bg-[#2a2a2d]/50'
                 }`}
               >
                 <div className="flex items-center gap-3">
@@ -198,7 +198,7 @@ export default function AdminDashboard({ setCurrentPage }) {
               <input 
                 type="text" 
                 placeholder="Search..." 
-                className="pl-9 pr-4 py-2 bg-white border border-gray-200 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-[#8b5cf6]/20 focus:border-[#8b5cf6] w-[240px] transition-all"
+                className="pl-9 pr-4 py-2 bg-white border border-gray-200 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-[#6a0dad]/20 focus:border-[#6a0dad] w-[240px] transition-all"
               />
             </div>
             
@@ -208,7 +208,7 @@ export default function AdminDashboard({ setCurrentPage }) {
             </button>
             
             <div className="flex items-center gap-2 bg-white border border-gray-200 px-3 py-1.5 rounded-full cursor-pointer hover:bg-gray-50 transition">
-              <div className="w-6 h-6 rounded-full bg-[#8b5cf6] flex items-center justify-center text-white font-bold text-[10px]">
+              <div className="w-6 h-6 rounded-full bg-[#6a0dad] flex items-center justify-center text-white font-bold text-[10px]">
                 {initial}
               </div>
               <span className="text-sm font-medium pr-1 text-gray-700">{firstName}</span>
@@ -223,7 +223,7 @@ export default function AdminDashboard({ setCurrentPage }) {
             <div className="space-y-8 max-w-[1200px] mx-auto">
               
               {/* Banner */}
-              <div className="rounded-2xl bg-gradient-to-r from-[#18181b] via-[#27272a] to-[#14532d]/80 p-8 text-white relative overflow-hidden shadow-lg border border-gray-800">
+              <div className="rounded-2xl bg-gradient-to-r from-[#18181b] via-[#27272a] to-[#6a0dad]/80 p-8 text-white relative overflow-hidden shadow-lg border border-gray-800">
                 <div className="relative z-10">
                   <p className="text-gray-400 font-medium text-sm mb-1 uppercase tracking-wider">Welcome back,</p>
                   <h2 className="text-3xl font-bold mb-2 flex items-center gap-2">
@@ -238,7 +238,7 @@ export default function AdminDashboard({ setCurrentPage }) {
                 
                 {/* Abstract decorative circles */}
                 <div className="absolute right-0 bottom-0 w-64 h-64 bg-green-500/10 rounded-full blur-3xl translate-x-1/3 translate-y-1/3"></div>
-                <div className="absolute right-40 top-0 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl -translate-y-1/2"></div>
+                <div className="absolute right-40 top-0 w-48 h-48 bg-[#6a0dad]/40 rounded-full blur-3xl -translate-y-1/2"></div>
               </div>
 
               {/* Overview Stats */}
