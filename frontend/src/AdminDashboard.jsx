@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { FiSearch, FiBell, FiLogOut, FiUsers, FiGrid, FiBox, FiCalendar, FiAlertCircle, FiTrendingUp } from 'react-icons/fi';
+import { BiBuildingHouse } from 'react-icons/bi';
 
 export default function AdminDashboard({ setCurrentPage }) {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('Dashboard');
   const jwt = localStorage.getItem('jwt');
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
 
   const fetchUsers = () => {
     fetch('http://localhost:8082/api/admin/users', {
@@ -68,70 +72,353 @@ export default function AdminDashboard({ setCurrentPage }) {
     }
   };
 
+  const fullName = user.fullName || user.username || 'Admin User';
+  const firstName = fullName.split(' ')[0];
+  const initial = firstName.charAt(0).toUpperCase();
+
+  const handleLogout = () => {
+    localStorage.removeItem('jwt');
+    localStorage.removeItem('user');
+    window.location.href = '/';
+  };
+
+  const pendingUsers = users.filter(u => u.status === 'PENDING').length;
+
   return (
-    <div style={{ padding: '24px', backgroundColor: '#f3f4f6', minHeight: '100vh', fontFamily: 'Arial, sans-serif' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-        <h1 style={{ fontSize: '28px', color: '#1f2937', fontWeight: 'bold' }}>Admin Dashboard</h1>
-        <button 
-          onClick={() => {
-            localStorage.removeItem('jwt');
-            localStorage.removeItem('user');
-            setCurrentPage('signin');
-          }}
-          style={{ padding: '10px 16px', background: '#ef4444', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer' }}>
-          Logout
-        </button>
-      </div>
-      
-      <div style={{ background: 'white', padding: '24px', borderRadius: '12px', boxShadow: '0 4px 6px rgba(0,0,0,0.05)' }}>
-        <h2 style={{ fontSize: '20px', marginBottom: '16px', color: '#374151' }}>User Registrations</h2>
+    <div className="flex h-screen bg-[#f3f4f6] font-sans">
+      {/* Sidebar */}
+      <div className="w-[280px] bg-[#1e1e1e] text-white flex flex-col pt-6 pb-6 shadow-xl z-10 shrink-0">
         
-        {loading ? (
-          <p>Loading users...</p>
-        ) : (
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-            <thead>
-              <tr style={{ background: '#f9fafb', textAlign: 'left' }}>
-                <th style={{ padding: '12px', borderBottom: '1px solid #e5e7eb' }}>Name</th>
-                <th style={{ padding: '12px', borderBottom: '1px solid #e5e7eb' }}>Email</th>
-                <th style={{ padding: '12px', borderBottom: '1px solid #e5e7eb' }}>Role</th>
-                <th style={{ padding: '12px', borderBottom: '1px solid #e5e7eb' }}>Status</th>
-                <th style={{ padding: '12px', borderBottom: '1px solid #e5e7eb' }}>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map(user => (
-                <tr key={user.id} style={{ borderBottom: '1px solid #e5e7eb' }}>
-                  <td style={{ padding: '12px' }}>{user.fullName || user.username}</td>
-                  <td style={{ padding: '12px' }}>{user.email}</td>
-                  <td style={{ padding: '12px' }}>{user.role}</td>
-                  <td style={{ padding: '12px' }}>
-                    <span style={{
-                      padding: '4px 8px', borderRadius: '9999px', fontSize: '12px', fontWeight: 'bold',
-                      background: user.status === 'PENDING' ? '#fef3c7' : user.status === 'ACTIVE' ? '#d1fae5' : '#fee2e2',
-                      color: user.status === 'PENDING' ? '#d97706' : user.status === 'ACTIVE' ? '#059669' : '#dc2626'
-                    }}>
-                      {user.status}
-                    </span>
-                  </td>
-                  <td style={{ padding: '12px', display: 'flex', gap: '8px' }}>
-                    {user.status === 'PENDING' && (
-                      <>
-                        <button onClick={() => handleApprove(user.id, user.role)} style={{ background: '#10b981', color: 'white', border: 'none', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer' }}>Approve</button>
-                        <button onClick={() => handleReject(user.id)} style={{ background: '#ef4444', color: 'white', border: 'none', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer' }}>Reject</button>
-                      </>
-                    )}
-                  </td>
-                </tr>
-              ))}
-              {users.length === 0 && (
-                <tr>
-                  <td colSpan="5" style={{ padding: '24px', textAlign: 'center', color: '#6b7280' }}>No users found</td>
-                </tr>
+        {/* Logo Section */}
+        <div className="px-6 flex items-center gap-3 mb-8 cursor-pointer">
+          <div className="w-10 h-10 rounded-lg bg-[#22c55e] flex items-center justify-center">
+            <BiBuildingHouse size={22} className="text-white" />
+          </div>
+          <div>
+            <h1 className="font-semibold text-[15px] leading-tight tracking-wide">Smart Campus</h1>
+            <p className="text-[#9ca3af] text-[12px]">Operations Hub</p>
+          </div>
+        </div>
+
+        {/* Profile Card */}
+        <div className="px-5 mb-8">
+          <div className="bg-[#2a2a2d] rounded-xl p-3 flex items-center gap-3 border border-[#3f3f46]">
+            <div className="w-10 h-10 rounded-full bg-[#8b5cf6] flex items-center justify-center text-white font-bold text-lg">
+              {initial}
+            </div>
+            <div className="overflow-hidden">
+              <p className="font-medium text-sm truncate">{fullName}</p>
+              <p className="text-[#8b5cf6] text-xs font-semibold">Administrator</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Navigation Wrapper */}
+        <div className="flex-1 overflow-y-auto px-4">
+          <ul className="space-y-1">
+            <li>
+              <button
+                onClick={() => setActiveTab('Dashboard')}
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+                  activeTab === 'Dashboard' ? 'bg-[#2a2a2d] text-white font-semibold shadow-sm' : 'text-[#a1a1aa] hover:text-white hover:bg-[#2a2a2d]/50'
+                }`}
+              >
+                <FiGrid size={18} />
+                <span className="text-[14px]">Dashboard</span>
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => setActiveTab('Manage Users')}
+                className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all ${
+                  activeTab === 'Manage Users' ? 'bg-[#2a2a2d] text-white font-semibold shadow-sm' : 'text-[#a1a1aa] hover:text-white hover:bg-[#2a2a2d]/50'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <FiUsers size={18} />
+                  <span className="text-[14px]">Manage Users</span>
+                </div>
+                {pendingUsers > 0 && (
+                  <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">{pendingUsers}</span>
+                )}
+              </button>
+            </li>
+            <li>
+              <button
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[#a1a1aa]/50 hover:bg-[#2a2a2d]/20 transition-all cursor-not-allowed"
+              >
+                <FiBox size={18} />
+                <span className="text-[14px]">Facilities & Assets</span>
+                <span className="text-[10px] ml-auto bg-[#3f3f46] px-1.5 py-0.5 rounded text-[#a1a1aa]">soon</span>
+              </button>
+            </li>
+            <li>
+               <button
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[#a1a1aa]/50 hover:bg-[#2a2a2d]/20 transition-all cursor-not-allowed"
+              >
+                <FiCalendar size={18} />
+                <span className="text-[14px]">Booking Requests</span>
+                <span className="text-[10px] ml-auto bg-[#3f3f46] px-1.5 py-0.5 rounded text-[#a1a1aa]">soon</span>
+              </button>
+            </li>
+            <li>
+              <button
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[#a1a1aa]/50 hover:bg-[#2a2a2d]/20 transition-all cursor-not-allowed"
+              >
+                <FiAlertCircle size={18} />
+                <span className="text-[14px]">Incident Tickets</span>
+                <span className="text-[10px] ml-auto bg-[#3f3f46] px-1.5 py-0.5 rounded text-[#a1a1aa]">soon</span>
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        {/* Logout */}
+        <div className="px-4 mt-auto pt-6 border-t border-[#2a2a2d]">
+          <button 
+            onClick={handleLogout}
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[#ef4444] hover:bg-[#ef4444]/10 transition-all font-medium"
+          >
+            <FiLogOut size={18} />
+            <span className="text-[14px]">Logout</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col h-screen overflow-hidden">
+        
+        {/* Top Header */}
+        <header className="h-[76px] bg-[#f9fafb] border-b border-gray-200 flex items-center justify-between px-8 shrink-0">
+          <h2 className="text-[20px] font-bold text-gray-800">{activeTab}</h2>
+          
+          <div className="flex items-center gap-6">
+            <div className="relative">
+              <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+              <input 
+                type="text" 
+                placeholder="Search..." 
+                className="pl-9 pr-4 py-2 bg-white border border-gray-200 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-[#8b5cf6]/20 focus:border-[#8b5cf6] w-[240px] transition-all"
+              />
+            </div>
+            
+            <button className="relative text-gray-500 hover:text-gray-700 transition">
+              <FiBell size={20} />
+              <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
+            </button>
+            
+            <div className="flex items-center gap-2 bg-white border border-gray-200 px-3 py-1.5 rounded-full cursor-pointer hover:bg-gray-50 transition">
+              <div className="w-6 h-6 rounded-full bg-[#8b5cf6] flex items-center justify-center text-white font-bold text-[10px]">
+                {initial}
+              </div>
+              <span className="text-sm font-medium pr-1 text-gray-700">{firstName}</span>
+            </div>
+          </div>
+        </header>
+
+        {/* Main Scrolling Area */}
+        <div className="flex-1 overflow-y-auto p-8">
+          
+          {activeTab === 'Dashboard' && (
+            <div className="space-y-8 max-w-[1200px] mx-auto">
+              
+              {/* Banner */}
+              <div className="rounded-2xl bg-gradient-to-r from-[#18181b] via-[#27272a] to-[#14532d]/80 p-8 text-white relative overflow-hidden shadow-lg border border-gray-800">
+                <div className="relative z-10">
+                  <p className="text-gray-400 font-medium text-sm mb-1 uppercase tracking-wider">Welcome back,</p>
+                  <h2 className="text-3xl font-bold mb-2 flex items-center gap-2">
+                    {fullName} <span role="img" aria-label="wave">👋</span>
+                  </h2>
+                  <p className="text-gray-300">Here's your campus overview for today.</p>
+                </div>
+                
+                <div className="absolute top-8 right-8 w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/10">
+                  <FiTrendingUp className="text-[#4ade80]" size={24} />
+                </div>
+                
+                {/* Abstract decorative circles */}
+                <div className="absolute right-0 bottom-0 w-64 h-64 bg-green-500/10 rounded-full blur-3xl translate-x-1/3 translate-y-1/3"></div>
+                <div className="absolute right-40 top-0 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl -translate-y-1/2"></div>
+              </div>
+
+              {/* Overview Stats */}
+              <div>
+                <h3 className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-4">Overview</h3>
+                <div className="grid grid-cols-4 gap-6">
+                  
+                  {/* Total Users */}
+                  <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col justify-between h-[150px]">
+                    <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center mb-auto">
+                      <FiUsers className="text-blue-500" size={20} />
+                    </div>
+                    <div>
+                      <div className="text-2xl font-bold text-gray-800 mb-1">{users.length}</div>
+                      <p className="text-sm font-bold text-gray-800">Total Users</p>
+                      <p className="text-xs text-gray-400 mt-1">Registered users</p>
+                    </div>
+                  </div>
+
+                  {/* Facilities */}
+                  <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col justify-between h-[150px]">
+                    <div className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center mb-auto">
+                      <BiBuildingHouse className="text-gray-600" size={20} />
+                    </div>
+                    <div>
+                      <div className="text-2xl font-bold text-gray-800 mb-1">12</div>
+                      <p className="text-sm font-bold text-gray-800">Facilities</p>
+                      <p className="text-xs text-gray-400 mt-1">Campus assets</p>
+                    </div>
+                  </div>
+
+                  {/* Booking Requests */}
+                  <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col justify-between h-[150px]">
+                    <div className="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center mb-auto">
+                      <FiCalendar className="text-green-500" size={20} />
+                    </div>
+                    <div>
+                      <div className="text-2xl font-bold text-gray-800 mb-1">5</div>
+                      <p className="text-sm font-bold text-gray-800">Booking Requests</p>
+                      <p className="text-xs text-gray-400 mt-1">Pending approval</p>
+                    </div>
+                  </div>
+
+                  {/* Open Incidents */}
+                  <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col justify-between h-[150px]">
+                    <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center mb-auto">
+                      <FiAlertCircle className="text-red-500" size={20} />
+                    </div>
+                    <div>
+                      <div className="text-2xl font-bold text-gray-800 mb-1">2</div>
+                      <p className="text-sm font-bold text-gray-800">Open Incidents</p>
+                      <p className="text-xs text-gray-400 mt-1">Requiring attention</p>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              {/* Modules Grid */}
+              <div className="pb-8">
+                <h3 className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-4">Modules</h3>
+                <div className="grid grid-cols-3 gap-6 opacity-80 cursor-not-allowed">
+                  
+                  {/* Facilities Card */}
+                  <div className="bg-white rounded-2xl p-8 border-2 border-dashed border-gray-200 text-center flex flex-col items-center">
+                    <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center mb-4">
+                      <BiBuildingHouse className="text-gray-400" size={24} />
+                    </div>
+                    <h4 className="font-bold text-gray-800 mb-2">Facilities & Assets</h4>
+                    <p className="text-sm text-gray-400">Manage campus buildings, rooms, and equipment. Under development by your team.</p>
+                  </div>
+
+                  {/* Bookings Card */}
+                  <div className="bg-white rounded-2xl p-8 border-2 border-dashed border-gray-200 text-center flex flex-col items-center">
+                    <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center mb-4">
+                      <FiCalendar className="text-gray-400" size={24} />
+                    </div>
+                    <h4 className="font-bold text-gray-800 mb-2">Booking Requests</h4>
+                    <p className="text-sm text-gray-400">Review and approve resource booking requests from students and staff.</p>
+                  </div>
+
+                  {/* Incidents Card */}
+                  <div className="bg-white rounded-2xl p-8 border-2 border-dashed border-gray-200 text-center flex flex-col items-center">
+                    <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center mb-4">
+                      <FiAlertCircle className="text-gray-400" size={24} />
+                    </div>
+                    <h4 className="font-bold text-gray-800 mb-2">Incident Tickets</h4>
+                    <p className="text-sm text-gray-400">Track and resolve campus facility incidents and maintenance requests.</p>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+          )}
+
+          {activeTab === 'Manage Users' && (
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 max-w-[1200px] mx-auto">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-lg font-bold text-gray-800">User Registrations</h3>
+                <button 
+                  onClick={fetchUsers}
+                  className="px-4 py-2 bg-[#f3f4f6] hover:bg-gray-200 text-sm font-medium text-gray-700 rounded-lg transition"
+                >
+                  Refresh Data
+                </button>
+              </div>
+
+              {loading ? (
+                <div className="py-12 flex justify-center text-gray-400">Loading users...</div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="border-b border-gray-100 bg-[#f9fafb]">
+                        <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider rounded-tl-lg">User Details</th>
+                        <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Role</th>
+                        <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
+                        <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider rounded-tr-lg">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100">
+                      {users.length === 0 ? (
+                        <tr>
+                          <td colSpan="4" className="px-6 py-12 text-center text-gray-500">No users found.</td>
+                        </tr>
+                      ) : (
+                        users.map((user) => (
+                          <tr key={user.id} className="hover:bg-[#f9fafb] transition group duration-200">
+                            <td className="px-6 py-4">
+                              <div className="flex flex-col">
+                                <span className="font-semibold text-gray-800">{user.fullName || user.username}</span>
+                                <span className="text-sm text-gray-500">{user.email}</span>
+                              </div>
+                            </td>
+                            <td className="px-6 py-4">
+                              <span className="text-sm font-medium text-gray-600 bg-gray-100 px-3 py-1 rounded-full">
+                                {user.role}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4">
+                              <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest ${
+                                user.status === 'PENDING' ? 'bg-amber-100 text-amber-700' :
+                                user.status === 'ACTIVE' ? 'bg-emerald-100 text-emerald-700' :
+                                'bg-red-100 text-red-700'
+                              }`}>
+                                {user.status}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4">
+                              {user.status === 'PENDING' ? (
+                                <div className="flex gap-2">
+                                  <button 
+                                    onClick={() => handleApprove(user.id, user.role)} 
+                                    className="px-4 py-1.5 bg-[#10b981] hover:bg-[#059669] text-white text-sm font-medium rounded-lg transition-colors shadow-sm"
+                                  >
+                                    Approve
+                                  </button>
+                                  <button 
+                                    onClick={() => handleReject(user.id)} 
+                                    className="px-4 py-1.5 bg-red-500 hover:bg-red-600 text-white text-sm font-medium rounded-lg transition-colors shadow-sm"
+                                  >
+                                    Reject
+                                  </button>
+                                </div>
+                              ) : (
+                                <span className="text-sm text-gray-400 italic">No actions needed</span>
+                              )}
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
               )}
-            </tbody>
-          </table>
-        )}
+            </div>
+          )}
+
+        </div>
       </div>
     </div>
   );
