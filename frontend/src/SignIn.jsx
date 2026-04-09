@@ -397,7 +397,10 @@ export default function SignIn({ setCurrentPage }) {
 
             <div style={{ textAlign: 'center', marginBottom: '16px' }}>
               <button
-                onClick={() => alert('Forgot password functionality would connect to backend')}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setCurrentPage('forgot-password');
+                }}
                 style={{
                   background: 'none',
                   border: 'none',

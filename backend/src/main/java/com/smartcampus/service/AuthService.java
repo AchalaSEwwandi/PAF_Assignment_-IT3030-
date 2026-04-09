@@ -38,6 +38,12 @@ public class AuthService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private com.smartcampus.repository.PasswordResetTokenRepository tokenRepository;
+
     public AuthResponse authenticate(LoginRequest loginRequest) {
         try {
             authenticationManager.authenticate(
@@ -182,5 +188,43 @@ public class AuthService {
         } catch (Exception e) {
             return new AuthResponse("Registration failed: " + e.getMessage());
         }
+    }
+
+    @org.springframework.transaction.annotation.Transactional
+    public AuthResponse forgotPassword(com.smartcampus.dto.ForgotPasswordRequest request) {
+        Optional<User> userOpt = userRepository.findByEmail(request.getEmail());
+        if (!userOpt.isPresent()) {
+            return new AuthResponse("If that email address is in our database, we will send you an email to reset your password.");
+        }
+
+        User user = userOpt.get();
+        String token = UUID.randomUUID().toString();
+        
+        tokenRepository.deleteByUser(user); // Delete any existing token
+
+        com.smartcampus.model.PasswordResetToken resetToken = new com.smartcampus.model.PasswordResetToken(token, user);
+        tokenRepository.save(resetToken);
+
+        String resetUrl = "http://localhost:5173/reset-password?token=" + token;
+        String emailText = "To reset your password, click the link below:\n" + resetUrl;
+
+        emailService.sendEmail(user.getEmail(), "Password Reset Request", emailText);
+
+        return new AuthResponse("If that email address is in our database, we will send you an email to reset your password.");
+    }
+
+    public AuthResponse resetPassword(com.smartcampus.dto.ResetPasswordRequest request) {
+        Optional<com.smartcampus.model.PasswordResetToken> tokenOpt = tokenRepository.findByToken(request.getToken());
+
+        if (!tokenOpt.isPresent() || tokenOpt.get().isExpired()) {
+            return new AuthResponse("Invalid or expired password reset token.");
+        }
+
+        User user = tokenOpt.get().getUser();
+        user.setPasswordHash(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
+        tokenRepository.delete(tokenOpt.get());
+
+        return new AuthResponse("Password successfully reset.");
     }
 }

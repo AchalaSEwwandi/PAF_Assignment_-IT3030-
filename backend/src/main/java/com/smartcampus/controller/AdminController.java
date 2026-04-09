@@ -18,6 +18,9 @@ public class AdminController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private com.smartcampus.service.EmailService emailService;
+
     @GetMapping("/users")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<User>> getAllUsers() {
@@ -42,6 +45,13 @@ public class AdminController {
             user.setRole(roleRequest.getRole());
             userRepository.save(user);
 
+            // Send email
+            String subject = "Smart Campus - Account Approved";
+            String text = "Dear " + (user.getFullName() != null ? user.getFullName() : user.getUsername()) + ",\n\n" +
+                          "Your account has been approved by the admin. You can now log in to the Smart Campus system.\n\n" +
+                          "Best regards,\nSmart Campus Admin";
+            emailService.sendEmail(user.getEmail(), subject, text);
+
             return ResponseEntity.ok("User approved successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Failed to approve user: " + e.getMessage());
@@ -59,6 +69,13 @@ public class AdminController {
 
             user.setStatus(User.Status.REJECTED);
             userRepository.save(user);
+
+            // Send rejection email
+            String subject = "Smart Campus - Account Rejected";
+            String text = "Dear " + (user.getFullName() != null ? user.getFullName() : user.getUsername()) + ",\n\n" +
+                          "We regret to inform you that your account registration has been rejected by the admin.\n\n" +
+                          "Best regards,\nSmart Campus Admin";
+            emailService.sendEmail(user.getEmail(), subject, text);
 
             return ResponseEntity.ok("User rejected successfully");
         } catch (Exception e) {

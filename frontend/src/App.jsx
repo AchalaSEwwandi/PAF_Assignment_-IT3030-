@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import SignIn from './SignIn';
 import Register from './Register';
-
+import AdminDashboard from './AdminDashboard';
+import ForgotPassword from './ForgotPassword';
+import ResetPassword from './ResetPassword';
 export default function App() {
   const [currentPage, setCurrentPage] = useState(() => {
     if (window.location.hash.includes('access_token') || window.location.pathname.includes('/auth/callback')) {
@@ -44,6 +46,21 @@ export default function App() {
   // Show Register page
   if (currentPage === 'register') {
     return <Register setCurrentPage={setCurrentPage} />;
+  }
+
+  // Show Admin Dashboard
+  if (currentPage === 'admin' || window.location.pathname === '/admin') {
+    return <AdminDashboard setCurrentPage={setCurrentPage} />;
+  }
+
+  // Show Forgot Password
+  if (currentPage === 'forgot-password') {
+    return <ForgotPassword setCurrentPage={setCurrentPage} />;
+  }
+
+  // Show Reset Password
+  if (currentPage === 'reset-password' || window.location.pathname === '/reset-password') {
+    return <ResetPassword setCurrentPage={setCurrentPage} />;
   }
 
   return (

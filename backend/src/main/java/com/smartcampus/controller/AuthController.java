@@ -58,4 +58,27 @@ public class AuthController {
             return ResponseEntity.badRequest().body(new AuthResponse("Registration failed: " + e.getMessage()));
         }
     }
+    
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestBody com.smartcampus.dto.ForgotPasswordRequest request) {
+        try {
+            AuthResponse response = authService.forgotPassword(request);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new AuthResponse("Forgot password request failed: " + e.getMessage()));
+        }
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody com.smartcampus.dto.ResetPasswordRequest request) {
+        try {
+            AuthResponse response = authService.resetPassword(request);
+            if ("Password successfully reset.".equals(response.getMessage())) {
+                return ResponseEntity.ok(response);
+            }
+            return ResponseEntity.badRequest().body(response);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new AuthResponse("Reset password failed: " + e.getMessage()));
+        }
+    }
 }
