@@ -3,16 +3,12 @@ import SignIn from './SignIn';
 import Register from './Register';
 
 export default function App() {
-<<<<<<< HEAD
   const [currentPage, setCurrentPage] = useState(() => {
     if (window.location.hash.includes('access_token') || window.location.pathname.includes('/auth/callback')) {
       return 'signin';
     }
     return 'home';
   });
-=======
-  const [currentPage, setCurrentPage] = useState('home');
->>>>>>> 2dbbab9d29ee86b9aea5ad189df4948350af6b40
   const [activeTab, setActiveTab] = useState('Dashboard');
 
   const handleNavClick = (tab) => {

@@ -6,11 +6,7 @@ export default function Login({ setCurrentPage }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-<<<<<<< HEAD
   const [emailError, setEmailError] = useState('');
-
-=======
->>>>>>> 2dbbab9d29ee86b9aea5ad189df4948350af6b40
   const handleGoogleLogin = () => {
     // Simple Google OAuth redirect
     const googleAuthUrl = 'https://accounts.google.com/o/oauth2/v2/auth?' +
@@ -28,7 +24,6 @@ export default function Login({ setCurrentPage }) {
   };
 
   const handleLogin = () => {
-<<<<<<< HEAD
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email) {
       setEmailError('Email is required');
@@ -38,8 +33,6 @@ export default function Login({ setCurrentPage }) {
       return;
     }
     setEmailError('');
-=======
->>>>>>> 2dbbab9d29ee86b9aea5ad189df4948350af6b40
     alert('Login functionality coming soon!');
   };
 
@@ -92,10 +85,7 @@ export default function Login({ setCurrentPage }) {
             <input
               type="email"
               placeholder="Email"
-<<<<<<< HEAD
               autoComplete="new-email"
-=======
->>>>>>> 2dbbab9d29ee86b9aea5ad189df4948350af6b40
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               style={{
@@ -113,23 +103,17 @@ export default function Login({ setCurrentPage }) {
                 boxSizing: 'border-box'
               }}
             />
-<<<<<<< HEAD
             {emailError && (
               <div style={{ color: '#ef4444', fontSize: '14px', marginTop: '4px', textAlign: 'left' }}>
                 {emailError}
               </div>
             )}
-=======
->>>>>>> 2dbbab9d29ee86b9aea5ad189df4948350af6b40
           </div>
           <div style={{ position: 'relative', marginBottom: '16px' }}>
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Password"
-<<<<<<< HEAD
               autoComplete="new-password"
-=======
->>>>>>> 2dbbab9d29ee86b9aea5ad189df4948350af6b40
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               style={{
