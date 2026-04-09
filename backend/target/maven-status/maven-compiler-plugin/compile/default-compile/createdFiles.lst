@@ -1,8 +1,5 @@
 com\smartcampus\dto\RoleRequest.class
-<<<<<<< HEAD
 com\smartcampus\dto\RegisterRequest.class
-=======
->>>>>>> 2dbbab9d29ee86b9aea5ad189df4948350af6b40
 com\smartcampus\repository\UserRepository.class
 com\smartcampus\model\Ticket.class
 com\smartcampus\repository\NotificationRepository.class
