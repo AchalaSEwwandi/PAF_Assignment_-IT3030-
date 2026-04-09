@@ -3,6 +3,7 @@ package com.smartcampus.dto;
 import com.smartcampus.model.User;
 
 public class AuthResponse {
+<<<<<<< HEAD
     private String token;
     private String message;
     private boolean success;
@@ -81,3 +82,29 @@ public class AuthResponse {
         this.status = status;
     }
 }
+=======
+    
+    private String jwt;
+    private User user;
+    private String message;
+    
+    public AuthResponse(String jwt, User user) {
+        this.jwt = jwt;
+        this.user = user;
+    }
+    
+    public AuthResponse(String message) {
+        this.message = message;
+    }
+    
+    // Getters and setters
+    public String getJwt() { return jwt; }
+    public void setJwt(String jwt) { this.jwt = jwt; }
+    
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
+    
+    public String getMessage() { return message; }
+    public void setMessage(String message) { this.message = message; }
+}
+>>>>>>> 2dbbab9d29ee86b9aea5ad189df4948350af6b40

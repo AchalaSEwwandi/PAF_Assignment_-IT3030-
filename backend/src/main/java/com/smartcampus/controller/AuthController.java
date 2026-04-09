@@ -20,8 +20,13 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
             AuthResponse response = authService.authenticate(loginRequest);
+<<<<<<< HEAD
 
             if (response.getToken() != null) {
+=======
+            
+            if (response.getJwt() != null) {
+>>>>>>> 2dbbab9d29ee86b9aea5ad189df4948350af6b40
                 return ResponseEntity.ok(response);
             } else {
                 return ResponseEntity.badRequest().body(response);
@@ -35,8 +40,13 @@ public class AuthController {
     public ResponseEntity<?> googleLogin(@RequestBody GoogleTokenRequest tokenRequest) {
         try {
             AuthResponse response = authService.authenticateWithGoogle(tokenRequest);
+<<<<<<< HEAD
 
             if (response.getToken() != null) {
+=======
+            
+            if (response.getJwt() != null) {
+>>>>>>> 2dbbab9d29ee86b9aea5ad189df4948350af6b40
                 return ResponseEntity.ok(response);
             } else {
                 return ResponseEntity.badRequest().body(response);
@@ -45,6 +55,7 @@ public class AuthController {
             return ResponseEntity.badRequest().body(new AuthResponse("Google login failed: " + e.getMessage()));
         }
     }
+<<<<<<< HEAD
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody com.smartcampus.dto.RegisterRequest request) {
@@ -58,4 +69,6 @@ public class AuthController {
             return ResponseEntity.badRequest().body(new AuthResponse("Registration failed: " + e.getMessage()));
         }
     }
+=======
+>>>>>>> 2dbbab9d29ee86b9aea5ad189df4948350af6b40
 }

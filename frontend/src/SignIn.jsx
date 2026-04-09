@@ -8,9 +8,6 @@ export default function SignIn({ setCurrentPage }) {
     password: '',
     reEnterPassword: ''
   });
-  const [showRolePrompt, setShowRolePrompt] = useState(false);
-  const [googleToken, setGoogleToken] = useState('');
-  const [selectedGoogleRole, setSelectedGoogleRole] = useState('Student');
 
   const [errors, setErrors] = useState({
     email: '',
@@ -18,7 +15,7 @@ export default function SignIn({ setCurrentPage }) {
   });
 
   const validateEmail = (email) => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    return email.includes('@') && email.includes('.');
   };
 
   const validateForm = () => {
@@ -30,7 +27,7 @@ export default function SignIn({ setCurrentPage }) {
     if (!formData.email) {
       newErrors.email = 'Email is required';
     } else if (!validateEmail(formData.email)) {
-      newErrors.email = 'Valid email is required (e.g., example@domain.com)';
+      newErrors.email = 'Email must contain @ symbol';
     }
 
     if (!formData.password) {
@@ -56,13 +53,12 @@ export default function SignIn({ setCurrentPage }) {
   // Handle Google OAuth callback
   useEffect(() => {
     const handleGoogleCallback = () => {
-      const hash = window.location.hash.substring(1);
-      const urlParams = new URLSearchParams(hash);
-      const token = urlParams.get('access_token');
+      const urlParams = new URLSearchParams(window.location.search);
+      const token = urlParams.get('token');
       
       if (token) {
         // Step 2: Send token to backend
-        fetch('http://localhost:8082/api/auth/google', {
+        fetch('http://localhost:8080/api/auth/google', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -73,28 +69,24 @@ export default function SignIn({ setCurrentPage }) {
         })
         .then(res => res.json())
         .then(data => {
-          if (data.token) {
+          if (data.jwt) {
             // Step 4: Store JWT and redirect based on role
-            localStorage.setItem('jwt', data.token);
-            const userObj = { email: data.email, fullName: data.fullName, role: data.role, status: data.status };
-            localStorage.setItem('user', JSON.stringify(userObj));
+            localStorage.setItem('jwt', data.jwt);
+            localStorage.setItem('user', JSON.stringify(data.user));
             
             // Redirect based on user role
-            if (data.role === 'ADMIN') {
+            if (data.user.role === 'ADMIN') {
               window.location.href = '/admin';
-            } else if (data.role === 'STUDENT') {
+            } else if (data.user.role === 'STUDENT') {
               window.location.href = '/student';
-            } else if (data.role === 'LECTURER') {
+            } else if (data.user.role === 'LECTURER') {
               window.location.href = '/lecturer';
-            } else if (data.role === 'TECHNICIAN') {
+            } else if (data.user.role === 'TECHNICIAN') {
               window.location.href = '/technician';
             } else {
               window.location.href = '/dashboard';
             }
-          } else if (data.message === 'ROLE_REQUIRED') {
-            setGoogleToken(token);
-            setShowRolePrompt(true);
-          } else if (data.status === 'PENDING' || data.message?.includes('admin approval')) {
+          } else if (data.status === 'PENDING') {
             // User exists but waiting for admin approval
             alert('Waiting for admin approval. Please contact your administrator.');
           } else {
@@ -110,48 +102,6 @@ export default function SignIn({ setCurrentPage }) {
 
     handleGoogleCallback();
   }, []);
-
-  const handleCompleteGoogleLogin = () => {
-    fetch('http://localhost:8082/api/auth/google', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        token: googleToken,
-        role: selectedGoogleRole
-      })
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (data.token) {
-        localStorage.setItem('jwt', data.token);
-        const userObj = { email: data.email, fullName: data.fullName, role: data.role, status: data.status };
-        localStorage.setItem('user', JSON.stringify(userObj));
-        
-        if (data.role === 'ADMIN') {
-          window.location.href = '/admin';
-        } else if (data.role === 'STUDENT') {
-          window.location.href = '/student';
-        } else if (data.role === 'LECTURER') {
-          window.location.href = '/lecturer';
-        } else if (data.role === 'TECHNICIAN') {
-          window.location.href = '/technician';
-        } else {
-          window.location.href = '/dashboard';
-        }
-      } else if (data.message?.includes('admin approval')) {
-        alert(data.message);
-        setShowRolePrompt(false);
-      } else {
-        alert('Google registration failed: ' + (data.message || 'Unknown error'));
-      }
-    })
-    .catch(error => {
-      console.error('Google registration error:', error);
-      alert('Google registration failed');
-    });
-  };
 
   const handleSignIn = () => {
     if (!validateForm()) {
@@ -177,20 +127,19 @@ export default function SignIn({ setCurrentPage }) {
     })
     .then(res => res.json())
     .then(data => {
-      if (data.token) {
+      if (data.jwt) {
         // Store JWT and user data
-        localStorage.setItem('jwt', data.token);
-        const userObj = { email: data.email, fullName: data.fullName, role: data.role, status: data.status };
-        localStorage.setItem('user', JSON.stringify(userObj));
+        localStorage.setItem('jwt', data.jwt);
+        localStorage.setItem('user', JSON.stringify(data.user));
         
         // Redirect based on user role
-        if (data.role === 'ADMIN') {
+        if (data.user.role === 'ADMIN') {
           window.location.href = '/admin';
-        } else if (data.role === 'STUDENT') {
+        } else if (data.user.role === 'STUDENT') {
           window.location.href = '/student';
-        } else if (data.role === 'LECTURER') {
+        } else if (data.user.role === 'LECTURER') {
           window.location.href = '/lecturer';
-        } else if (data.role === 'TECHNICIAN') {
+        } else if (data.user.role === 'TECHNICIAN') {
           window.location.href = '/technician';
         } else {
           window.location.href = '/dashboard';
@@ -232,45 +181,6 @@ export default function SignIn({ setCurrentPage }) {
         maxWidth: '450px',
         width: '100%'
       }}>
-        {showRolePrompt ? (
-          <div>
-            <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '16px', color: '#1f2937' }}>Almost there!</h2>
-            <p style={{ color: '#6b7280', marginBottom: '24px' }}>Please select your role to complete registration.</p>
-            <select
-              value={selectedGoogleRole}
-              onChange={(e) => setSelectedGoogleRole(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '12px',
-                border: '1px solid #d1d5db',
-                borderRadius: '8px',
-                fontSize: '16px',
-                backgroundColor: '#ffffff',
-                marginBottom: '24px'
-              }}
-            >
-              <option value="Student">Student</option>
-              <option value="Lecturer">Lecturer</option>
-              <option value="Technician">Technician</option>
-            </select>
-            <button
-              onClick={handleCompleteGoogleLogin}
-              style={{
-                width: '100%',
-                padding: '12px 24px',
-                fontSize: '16px',
-                borderRadius: '8px',
-                border: 'none',
-                backgroundColor: '#6a0dad',
-                color: 'white',
-                cursor: 'pointer'
-              }}
-            >
-              Complete Registration
-            </button>
-          </div>
-        ) : (
-          <>
         <div style={{ marginBottom: '32px' }}>
           <div style={{
             width: '60px',
@@ -327,7 +237,6 @@ export default function SignIn({ setCurrentPage }) {
             <input
               type="email"
               placeholder="Email address"
-              autoComplete="new-email"
               value={formData.email}
               onChange={(e) => setFormData({...formData, email: e.target.value})}
               style={{
@@ -357,7 +266,6 @@ export default function SignIn({ setCurrentPage }) {
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
-                autoComplete="new-password"
                 value={formData.password}
                 onChange={(e) => setFormData({...formData, password: e.target.value})}
                 style={{
@@ -454,14 +362,14 @@ export default function SignIn({ setCurrentPage }) {
                 >
                   {showPassword ? (
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                  <circle cx="12" cy="12" r="3"/>
-                </svg>
-) : (
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
                   <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
                   <line x1="1" y1="1" x2="23" y2="23"/>
+                </svg>
+) : (
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                  <circle cx="12" cy="12" r="3"/>
                 </svg>
 )}
                 </button>
@@ -529,8 +437,6 @@ export default function SignIn({ setCurrentPage }) {
             Create New Account
           </button>
         </div>
-        </>
-        )}
       </div>
     </div>
   );

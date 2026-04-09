@@ -57,12 +57,29 @@ export default function Register({ setCurrentPage }) {
   if (!formData.name) {
     newErrors.name = 'Name is required';
   }
+<<<<<<< HEAD
   
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!formData.email) {
     newErrors.email = 'Email is required';
   } else if (!emailRegex.test(formData.email)) {
     newErrors.email = 'Valid email is required (e.g., example@domain.com)';
+=======
+  if (!formData.email) {
+    newErrors.email = 'Email is required';
+  } else if (!formData.email.includes('@')) {
+    newErrors.email = 'Email must contain @ symbol';
+  } else if (formData.email.split('@')[0] === '') {
+    newErrors.email = 'Email must have text before @';
+  } else if (formData.email.split('@')[1] === '') {
+    newErrors.email = 'Email must have text after @';
+  } else if (!formData.email.split('@')[1].includes('.')) {
+    newErrors.email = 'Email must have domain after @';
+  } else if (formData.email.split('@')[1].split('.')[0] === '') {
+    newErrors.email = 'Email must have domain name';
+  } else if (formData.email.split('@')[1].split('.')[1] === '') {
+    newErrors.email = 'Email must have extension like .com';
+>>>>>>> 2dbbab9d29ee86b9aea5ad189df4948350af6b40
   }
   if (!formData.password) {
     newErrors.password = 'Password is required';
@@ -81,7 +98,11 @@ export default function Register({ setCurrentPage }) {
   }
 
   try {
+<<<<<<< HEAD
     const res = await fetch('http://localhost:8082/api/auth/register', {
+=======
+    const res = await fetch('http://localhost:8082/api/register', {
+>>>>>>> 2dbbab9d29ee86b9aea5ad189df4948350af6b40
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -165,7 +186,10 @@ export default function Register({ setCurrentPage }) {
             </label>
             <input
               type="text"
+<<<<<<< HEAD
               autoComplete="off"
+=======
+>>>>>>> 2dbbab9d29ee86b9aea5ad189df4948350af6b40
               value={formData.name}
               onChange={(e) => setFormData({...formData, name: e.target.value})}
               style={{
@@ -187,7 +211,10 @@ export default function Register({ setCurrentPage }) {
             </label>
             <input
               type="email"
+<<<<<<< HEAD
               autoComplete="new-email"
+=======
+>>>>>>> 2dbbab9d29ee86b9aea5ad189df4948350af6b40
               value={formData.email}
               onChange={(e) => setFormData({...formData, email: e.target.value})}
               style={{
@@ -215,7 +242,10 @@ export default function Register({ setCurrentPage }) {
             <div style={{ position: 'relative' }}>
               <input
                 type={showPassword ? "text" : "password"}
+<<<<<<< HEAD
                 autoComplete="new-password"
+=======
+>>>>>>> 2dbbab9d29ee86b9aea5ad189df4948350af6b40
                 value={formData.password}
                 onChange={handlePasswordChange}
                 style={{
@@ -269,7 +299,10 @@ export default function Register({ setCurrentPage }) {
             <div style={{ position: 'relative' }}>
               <input
                 type={showRePassword ? "text" : "password"}
+<<<<<<< HEAD
                 autoComplete="new-password"
+=======
+>>>>>>> 2dbbab9d29ee86b9aea5ad189df4948350af6b40
                 value={formData.reEnterPassword}
                 onChange={handleReEnterPasswordChange}
                 style={{
