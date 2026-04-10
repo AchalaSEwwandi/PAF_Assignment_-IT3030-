@@ -80,15 +80,16 @@ export default function SignIn({ setCurrentPage }) {
             } else if (data.user.role === 'STUDENT') {
               window.location.href = '/student';
             } else if (data.user.role === 'LECTURER') {
+              alert('Your account has been approved. You can now access the dashboard.');
               window.location.href = '/lecturer';
             } else if (data.user.role === 'TECHNICIAN') {
+              alert('Your account has been approved. You can now access the dashboard.');
               window.location.href = '/technician';
             } else {
               window.location.href = '/dashboard';
             }
-          } else if (data.status === 'PENDING') {
-            // User exists but waiting for admin approval
-            alert('Waiting for admin approval. Please contact your administrator.');
+          } else if (data.status === 'PENDING' || data.message?.includes('approval')) {
+            alert('Your account is not approved yet. Please wait for admin approval. A notification email will be sent once approved.');
           } else {
             alert('Google login failed: ' + (data.message || 'Authentication failed'));
           }
@@ -138,15 +139,16 @@ export default function SignIn({ setCurrentPage }) {
         } else if (data.user.role === 'STUDENT') {
           window.location.href = '/student';
         } else if (data.user.role === 'LECTURER') {
+          alert('Your account has been approved. You can now access the dashboard.');
           window.location.href = '/lecturer';
         } else if (data.user.role === 'TECHNICIAN') {
+          alert('Your account has been approved. You can now access the dashboard.');
           window.location.href = '/technician';
         } else {
           window.location.href = '/dashboard';
         }
-      } else if (data.status === 'PENDING') {
-        // User exists but waiting for admin approval
-        alert('Waiting for admin approval. Please contact your administrator.');
+      } else if (data.status === 'PENDING' || data.message?.includes('approval')) {
+        alert('Your account is not approved yet. Please wait for admin approval. A notification email will be sent once approved.');
       } else {
         // Show error message
         alert('Login failed: ' + (data.message || 'Invalid credentials'));

@@ -85,9 +85,9 @@ export default function AdminDashboard({ setCurrentPage }) {
   const pendingUsers = users.filter(u => u.status === 'PENDING').length;
 
   return (
-    <div className="flex h-screen bg-[#f3f4f6] font-sans">
+    <div className="flex h-screen bg-[#f3f4f6] font-dm-sans">
       {/* Sidebar */}
-      <div className="w-[280px] bg-[#1e1e1e] text-white flex flex-col pt-6 pb-6 shadow-xl z-10 shrink-0">
+      <div className="w-[280px] bg-[#3a0760] text-white flex flex-col pt-6 pb-6 shadow-xl z-10 shrink-0">
         
         {/* Logo Section */}
         <div className="px-6 flex items-center gap-3 mb-8 cursor-pointer">
@@ -95,7 +95,7 @@ export default function AdminDashboard({ setCurrentPage }) {
             <BiBuildingHouse size={22} className="text-white" />
           </div>
           <div>
-            <h1 className="font-semibold text-[15px] leading-tight tracking-wide">Smart Campus</h1>
+            <h1 className="font-syne font-semibold text-[15px] leading-tight tracking-wide">Smart Campus</h1>
             <p className="text-[#9ca3af] text-[12px]">Operations Hub</p>
           </div>
         </div>
@@ -190,7 +190,7 @@ export default function AdminDashboard({ setCurrentPage }) {
         
         {/* Top Header */}
         <header className="h-[76px] bg-[#f9fafb] border-b border-gray-200 flex items-center justify-between px-8 shrink-0">
-          <h2 className="text-[20px] font-bold text-gray-800">{activeTab}</h2>
+          <h2 className="font-syne text-[20px] font-bold text-gray-800">{activeTab}</h2>
           
           <div className="flex items-center gap-6">
             <div className="relative">
@@ -226,7 +226,7 @@ export default function AdminDashboard({ setCurrentPage }) {
               <div className="rounded-2xl bg-gradient-to-r from-[#18181b] via-[#27272a] to-[#6a0dad]/80 p-8 text-white relative overflow-hidden shadow-lg border border-gray-800">
                 <div className="relative z-10">
                   <p className="text-gray-400 font-medium text-sm mb-1 uppercase tracking-wider">Welcome back,</p>
-                  <h2 className="text-3xl font-bold mb-2 flex items-center gap-2">
+                  <h2 className="font-syne text-3xl font-bold mb-2 flex items-center gap-2">
                     {fullName} <span role="img" aria-label="wave">👋</span>
                   </h2>
                   <p className="text-gray-300">Here's your campus overview for today.</p>
@@ -243,11 +243,11 @@ export default function AdminDashboard({ setCurrentPage }) {
 
               {/* Overview Stats */}
               <div>
-                <h3 className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-4">Overview</h3>
+                <h3 className="font-syne text-sm font-bold text-gray-500 uppercase tracking-widest mb-4">Overview</h3>
                 <div className="grid grid-cols-4 gap-6">
                   
                   {/* Total Users */}
-                  <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col justify-between h-[150px]">
+                  <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#6a0dad]/20 border-b-4 border-b-[#6a0dad] flex flex-col justify-between h-[150px]">
                     <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center mb-auto">
                       <FiUsers className="text-blue-500" size={20} />
                     </div>
@@ -259,7 +259,7 @@ export default function AdminDashboard({ setCurrentPage }) {
                   </div>
 
                   {/* Facilities */}
-                  <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col justify-between h-[150px]">
+                  <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#6a0dad]/20 border-b-4 border-b-[#6a0dad] flex flex-col justify-between h-[150px]">
                     <div className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center mb-auto">
                       <BiBuildingHouse className="text-gray-600" size={20} />
                     </div>
@@ -271,7 +271,7 @@ export default function AdminDashboard({ setCurrentPage }) {
                   </div>
 
                   {/* Booking Requests */}
-                  <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col justify-between h-[150px]">
+                  <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#6a0dad]/20 border-b-4 border-b-[#6a0dad] flex flex-col justify-between h-[150px]">
                     <div className="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center mb-auto">
                       <FiCalendar className="text-green-500" size={20} />
                     </div>
@@ -283,7 +283,7 @@ export default function AdminDashboard({ setCurrentPage }) {
                   </div>
 
                   {/* Open Incidents */}
-                  <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col justify-between h-[150px]">
+                  <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#6a0dad]/20 border-b-4 border-b-[#6a0dad] flex flex-col justify-between h-[150px]">
                     <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center mb-auto">
                       <FiAlertCircle className="text-red-500" size={20} />
                     </div>
@@ -299,33 +299,33 @@ export default function AdminDashboard({ setCurrentPage }) {
 
               {/* Modules Grid */}
               <div className="pb-8">
-                <h3 className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-4">Modules</h3>
-                <div className="grid grid-cols-3 gap-6 opacity-80 cursor-not-allowed">
+                <h3 className="font-syne text-sm font-bold text-gray-500 uppercase tracking-widest mb-4">Modules</h3>
+                <div className="grid grid-cols-3 gap-6">
                   
                   {/* Facilities Card */}
-                  <div className="bg-white rounded-2xl p-8 border-2 border-dashed border-gray-200 text-center flex flex-col items-center">
-                    <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center mb-4">
-                      <BiBuildingHouse className="text-gray-400" size={24} />
+                  <div className="bg-white rounded-2xl p-8 border-2 border-dashed border-[#6a0dad]/30 hover:border-[#6a0dad] hover:shadow-lg hover:-translate-y-1 transition-all duration-300 text-center flex flex-col items-center cursor-pointer">
+                    <div className="w-12 h-12 bg-[#6a0dad]/10 rounded-xl flex items-center justify-center mb-4">
+                      <BiBuildingHouse className="text-[#6a0dad]" size={24} />
                     </div>
-                    <h4 className="font-bold text-gray-800 mb-2">Facilities & Assets</h4>
+                    <h4 className="font-syne font-bold text-gray-800 mb-2">Facilities & Assets</h4>
                     <p className="text-sm text-gray-400">Manage campus buildings, rooms, and equipment. Under development by your team.</p>
                   </div>
 
                   {/* Bookings Card */}
-                  <div className="bg-white rounded-2xl p-8 border-2 border-dashed border-gray-200 text-center flex flex-col items-center">
-                    <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center mb-4">
-                      <FiCalendar className="text-gray-400" size={24} />
+                  <div className="bg-white rounded-2xl p-8 border-2 border-dashed border-[#6a0dad]/30 hover:border-[#6a0dad] hover:shadow-lg hover:-translate-y-1 transition-all duration-300 text-center flex flex-col items-center cursor-pointer">
+                    <div className="w-12 h-12 bg-[#6a0dad]/10 rounded-xl flex items-center justify-center mb-4">
+                      <FiCalendar className="text-[#6a0dad]" size={24} />
                     </div>
-                    <h4 className="font-bold text-gray-800 mb-2">Booking Requests</h4>
+                    <h4 className="font-syne font-bold text-gray-800 mb-2">Booking Requests</h4>
                     <p className="text-sm text-gray-400">Review and approve resource booking requests from students and staff.</p>
                   </div>
 
                   {/* Incidents Card */}
-                  <div className="bg-white rounded-2xl p-8 border-2 border-dashed border-gray-200 text-center flex flex-col items-center">
-                    <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center mb-4">
-                      <FiAlertCircle className="text-gray-400" size={24} />
+                  <div className="bg-white rounded-2xl p-8 border-2 border-dashed border-[#6a0dad]/30 hover:border-[#6a0dad] hover:shadow-lg hover:-translate-y-1 transition-all duration-300 text-center flex flex-col items-center cursor-pointer">
+                    <div className="w-12 h-12 bg-[#6a0dad]/10 rounded-xl flex items-center justify-center mb-4">
+                      <FiAlertCircle className="text-[#6a0dad]" size={24} />
                     </div>
-                    <h4 className="font-bold text-gray-800 mb-2">Incident Tickets</h4>
+                    <h4 className="font-syne font-bold text-gray-800 mb-2">Incident Tickets</h4>
                     <p className="text-sm text-gray-400">Track and resolve campus facility incidents and maintenance requests.</p>
                   </div>
 
@@ -338,7 +338,7 @@ export default function AdminDashboard({ setCurrentPage }) {
           {activeTab === 'Manage Users' && (
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 max-w-[1200px] mx-auto">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-bold text-gray-800">User Registrations</h3>
+                <h3 className="font-syne text-lg font-bold text-gray-800">User Registrations</h3>
                 <button 
                   onClick={fetchUsers}
                   className="px-4 py-2 bg-[#f3f4f6] hover:bg-gray-200 text-sm font-medium text-gray-700 rounded-lg transition"
@@ -353,11 +353,11 @@ export default function AdminDashboard({ setCurrentPage }) {
                 <div className="overflow-x-auto">
                   <table className="w-full text-left border-collapse">
                     <thead>
-                      <tr className="border-b border-gray-100 bg-[#f9fafb]">
-                        <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider rounded-tl-lg">User Details</th>
-                        <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Role</th>
-                        <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
-                        <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider rounded-tr-lg">Actions</th>
+                      <tr className="border-b border-[#6a0dad]/20 bg-[#6a0dad] text-white">
+                        <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider rounded-tl-lg">User Details</th>
+                        <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider">Role</th>
+                        <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider">Status</th>
+                        <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider rounded-tr-lg">Actions</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
