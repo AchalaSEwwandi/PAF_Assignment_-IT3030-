@@ -2,6 +2,7 @@ com\smartcampus\repository\UserRepository.class
 com\smartcampus\model\Resource.class
 com\smartcampus\model\Ticket.class
 com\smartcampus\repository\NotificationRepository.class
+com\smartcampus\controller\BookingController.class
 com\smartcampus\model\Booking.class
 com\smartcampus\repository\TicketRepository.class
 com\smartcampus\model\User.class
