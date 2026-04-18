@@ -7,7 +7,9 @@ export default function AdminDashboard({ setCurrentPage }) {
   const [users, setUsers] = useState([]);
   const [resources, setResources] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('Dashboard');
+  const [activeTab, setActiveTab] = useState('Manage Users'); // Default to Manage Users for debugging
+  const [approvalRoles, setApprovalRoles] = useState({});
+  const [errorMessage, setErrorMessage] = useState(null);
   const jwt = localStorage.getItem('jwt');
   const user = JSON.parse(localStorage.getItem('user') || '{}');
 
@@ -17,13 +19,26 @@ export default function AdminDashboard({ setCurrentPage }) {
         'Authorization': `Bearer ${jwt}`
       }
     })
-      .then(res => res.json())
+      .then(async res => {
+        if (!res.ok) {
+           const text = await res.text();
+           throw new Error(`API Error ${res.status}: ${text}`);
+        }
+        return res.json();
+      })
       .then(data => {
-        setUsers(data);
+        if (Array.isArray(data)) {
+           setUsers(data);
+        } else {
+           throw new Error('Data is not an array: ' + JSON.stringify(data));
+        }
+        setErrorMessage(null);
         setLoading(false);
       })
       .catch(err => {
         console.error(err);
+        setErrorMessage(err.message);
+        setUsers([]);
         setLoading(false);
       });
   };
@@ -45,6 +60,10 @@ export default function AdminDashboard({ setCurrentPage }) {
     fetchUsers();
     fetchResources();
   }, [jwt, setCurrentPage]);
+
+  const handleRoleChange = (userId, role) => {
+    setApprovalRoles({ ...approvalRoles, [userId]: role });
+  };
 
   const handleApprove = (userId, role) => {
     fetch(`http://localhost:8082/api/admin/users/${userId}/approve`, {
@@ -368,7 +387,13 @@ export default function AdminDashboard({ setCurrentPage }) {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
-                      {users.length === 0 ? (
+                      {errorMessage ? (
+                        <tr>
+                          <td colSpan="4" className="px-6 py-12 text-center text-red-500 font-bold">
+                            Error loading users: {errorMessage}
+                          </td>
+                        </tr>
+                      ) : users.length === 0 ? (
                         <tr>
                           <td colSpan="4" className="px-6 py-12 text-center text-gray-500">No users found.</td>
                         </tr>
@@ -396,9 +421,18 @@ export default function AdminDashboard({ setCurrentPage }) {
                             </td>
                             <td className="px-6 py-4">
                               {user.status === 'PENDING' ? (
-                                <div className="flex gap-2">
+                                <div className="flex items-center gap-2">
+                                  <select 
+                                    className="border border-gray-300 rounded-lg px-2 py-1.5 text-sm bg-white text-gray-800 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#6a0dad]"
+                                    value={approvalRoles[user.id] || user.role}
+                                    onChange={(e) => handleRoleChange(user.id, e.target.value)}
+                                  >
+                                    <option value="STUDENT">Student</option>
+                                    <option value="LECTURER">Lecturer</option>
+                                    <option value="TECHNICIAN">Technician</option>
+                                  </select>
                                   <button
-                                    onClick={() => handleApprove(user.id, user.role)}
+                                    onClick={() => handleApprove(user.id, approvalRoles[user.id] || user.role)}
                                     className="px-4 py-1.5 bg-[#10b981] hover:bg-[#059669] text-white text-sm font-medium rounded-lg transition-colors shadow-sm"
                                   >
                                     Approve

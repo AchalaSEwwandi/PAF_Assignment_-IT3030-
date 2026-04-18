@@ -4,6 +4,9 @@ import Register from './Register';
 import AdminDashboard from './AdminDashboard';
 import ForgotPassword from './ForgotPassword';
 import ResetPassword from './ResetPassword';
+import StudentDashboard from './StudentDashboard';
+import LecturerDashboard from './LecturerDashboard';
+import TechnicianDashboard from './TechnicianDashboard';
 export default function App() {
   const [currentPage, setCurrentPage] = useState(() => {
     if (window.location.hash.includes('access_token') || window.location.pathname.includes('/auth/callback')) {
@@ -51,6 +54,21 @@ export default function App() {
   // Show Admin Dashboard
   if (currentPage === 'admin' || window.location.pathname === '/admin') {
     return <AdminDashboard setCurrentPage={setCurrentPage} />;
+  }
+
+  // Show Student Dashboard
+  if (currentPage === 'student' || window.location.pathname === '/student') {
+    return <StudentDashboard setCurrentPage={setCurrentPage} />;
+  }
+
+  // Show Lecturer Dashboard
+  if (currentPage === 'lecturer' || window.location.pathname === '/lecturer') {
+    return <LecturerDashboard setCurrentPage={setCurrentPage} />;
+  }
+
+  // Show Technician Dashboard
+  if (currentPage === 'technician' || window.location.pathname === '/technician') {
+    return <TechnicianDashboard setCurrentPage={setCurrentPage} />;
   }
 
   // Show Forgot Password

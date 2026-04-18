@@ -96,7 +96,11 @@ export default function Register({ setCurrentPage }) {
     const data = await res.json();
 
     if (res.ok) {
-      alert("Registered successfully. Wait for admin approval.");
+      if (formData.role === 'Student') {
+        alert("Registered successfully. You can now sign in.");
+      } else {
+        alert("Registered successfully. Wait for admin approval.");
+      }
       setCurrentPage('signin');
     } else {
       alert(data.message || "Registration failed");
