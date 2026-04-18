@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "echo 'No tests specified yet' && exit 0"
+    "test": "echo 'No tests specified yet'"
   },
   "dependencies": {
     "@react-oauth/google": "^0.13.4",
