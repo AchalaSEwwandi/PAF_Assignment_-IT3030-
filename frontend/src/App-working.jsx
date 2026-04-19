@@ -1,25 +1,6 @@
-
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
-import BookResource from "./pages/bookings/BookResource";
-import MyBookings from "./pages/bookings/MyBookings";
-import AdminBookings from "./pages/bookings/AdminBookings";
-
-
 import React, { useState } from 'react';
-import SignIn from './SignIn';
-import Register from './Register';
-import AdminDashboard from './AdminDashboard';
-import ForgotPassword from './ForgotPassword';
-import ResetPassword from './ResetPassword';
 
-export default function App() {
-  const [currentPage, setCurrentPage] = useState(() => {
-    if (window.location.hash.includes('access_token') || window.location.pathname.includes('/auth/callback')) {
-      return 'signin';
-    }
-    return 'home';
-  });
+export default function HomePage() {
   const [activeTab, setActiveTab] = useState('Dashboard');
 
   const handleNavClick = (tab) => {
@@ -40,50 +21,11 @@ export default function App() {
   };
 
   const handleSignIn = () => {
-    setCurrentPage('signin');
+    // Simple login simulation
+    alert('Login functionality would connect to backend here');
   };
-
-  const handleRegister = () => {
-    setCurrentPage('register');
-  };
-
-  // Show Sign-In page
-  if (currentPage === 'signin') {
-    return <SignIn setCurrentPage={setCurrentPage} />;
-  }
-
-  // Show Register page
-  if (currentPage === 'register') {
-    return <Register setCurrentPage={setCurrentPage} />;
-  }
-
-  // Show Admin Dashboard
-  if (currentPage === 'admin' || window.location.pathname === '/admin') {
-    return <AdminDashboard setCurrentPage={setCurrentPage} />;
-  }
-
-  // Show Forgot Password
-  if (currentPage === 'forgot-password') {
-    return <ForgotPassword setCurrentPage={setCurrentPage} />;
-  }
-
-  // Show Reset Password
-  if (currentPage === 'reset-password' || window.location.pathname === '/reset-password') {
-    return <ResetPassword setCurrentPage={setCurrentPage} />;
-  }
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home setCurrentPage={setCurrentPage} />} />
-        <Route path="/book-resource" element={<BookResource />} />
-        <Route path="/my-bookings" element={<MyBookings />} />
-        <Route path="/admin/bookings" element={<AdminBookings />} />
-      </Routes>
-    </Router>
-  );
-}
-
     <div style={{ backgroundColor: '#6a0dad', minHeight: '100vh', padding: '20px' }}>
       {/* Navigation */}
       <nav style={{
@@ -531,6 +473,5 @@ export default function App() {
         </div>
       </footer>
     </div>
-
-  
-  
+  );
+}
