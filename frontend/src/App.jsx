@@ -7,6 +7,7 @@ import AdminBookings from "./pages/bookings/AdminBookings";
 
 
 import React, { useState } from 'react';
+
 import SignIn from './SignIn';
 import Register from './Register';
 import AdminDashboard from './AdminDashboard';
@@ -75,7 +76,7 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home setCurrentPage={setCurrentPage} />} />
+    
         <Route path="/book-resource" element={<BookResource />} />
         <Route path="/my-bookings" element={<MyBookings />} />
         <Route path="/admin/bookings" element={<AdminBookings />} />
