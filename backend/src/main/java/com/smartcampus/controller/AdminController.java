@@ -33,7 +33,7 @@ public class AdminController {
 
     @PutMapping("/users/{id}/approve")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> approveUser(@PathVariable Long id, @RequestBody RoleRequest roleRequest) {
+    public ResponseEntity<?> approveUser(@PathVariable String id, @RequestBody RoleRequest roleRequest) {
         try {
             User user = userRepository.findById(id).orElse(null);
             if (user == null) {
@@ -59,7 +59,7 @@ public class AdminController {
 
     @PutMapping("/users/{id}/reject")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> rejectUser(@PathVariable Long id) {
+    public ResponseEntity<?> rejectUser(@PathVariable String id) {
         try {
             User user = userRepository.findById(id).orElse(null);
             if (user == null) {

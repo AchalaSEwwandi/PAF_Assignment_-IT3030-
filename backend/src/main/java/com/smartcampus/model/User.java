@@ -1,19 +1,12 @@
 package com.smartcampus.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "users")
+@Document(collection = "users")
 public class User {
 
     public enum Role {
@@ -30,49 +23,40 @@ public class User {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
-    @Column(nullable = false, unique = true, length = 50)
     private String username;
 
-    @Column(name = "full_name", nullable = false, length = 100)
+    @Field("full_name")
     private String fullName;
 
-    @Column(nullable = false, unique = true, length = 100)
     private String email;
 
-    @Column(name = "password_hash", nullable = false)
+    @Field("password_hash")
     private String passwordHash;
 
-    @Column(name = "google_id", length = 255)
+    @Field("google_id")
     private String googleId;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 30)
     private Role role;
 
-    @Column(name = "status", nullable = false, length = 20)
     private Status status = Status.PENDING;
 
-    @Column(name = "is_active", nullable = false)
+    @Field("is_active")
     private Boolean active = true;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Field("created_at")
     private LocalDateTime createdAt;
 
-    @PrePersist
-    void onCreate() {
-        if (createdAt == null) {
-            createdAt = LocalDateTime.now();
-        }
+    public User() {
+        this.createdAt = LocalDateTime.now();
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

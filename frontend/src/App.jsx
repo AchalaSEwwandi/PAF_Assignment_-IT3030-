@@ -7,11 +7,16 @@ import ResetPassword from './ResetPassword';
 import StudentDashboard from './StudentDashboard';
 import LecturerDashboard from './LecturerDashboard';
 import TechnicianDashboard from './TechnicianDashboard';
+import OAuth2Callback from './OAuth2Callback';
+import PendingApproval from './PendingApproval';
+
 export default function App() {
   const [currentPage, setCurrentPage] = useState(() => {
-    if (window.location.hash.includes('access_token') || window.location.pathname.includes('/auth/callback')) {
-      return 'signin';
-    }
+    const path = window.location.pathname;
+    const params = new URLSearchParams(window.location.search);
+    if (path === '/oauth2/callback') return 'oauth2-callback'; // token එක ඇතත් නැතත්
+    if (path === '/pending') return 'pending';
+    if (path === '/reset-password') return 'reset-password';
     return 'home';
   });
   const [activeTab, setActiveTab] = useState('Dashboard');
@@ -81,6 +86,16 @@ export default function App() {
     return <ResetPassword setCurrentPage={setCurrentPage} />;
   }
 
+  // Show OAuth2 Callback
+  if (currentPage === 'oauth2-callback') {
+    return <OAuth2Callback setCurrentPage={setCurrentPage} />;
+  }
+
+  // Show Pending Approval
+  if (currentPage === 'pending') {
+    return <PendingApproval setCurrentPage={setCurrentPage} />;
+  }
+
   return (
     <div style={{ backgroundColor: '#6a0dad', minHeight: '100vh', padding: '20px' }}>
       {/* Navigation */}
@@ -114,80 +129,80 @@ export default function App() {
             <span style={{ color: '#ffffff', fontWeight: '600', fontSize: '18px' }}>Smart Campus</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <a href="#" 
-               onClick={() => handleNavClick('Dashboard')}
-               onMouseDown={handleNavMouseDown}
-               onMouseUp={handleNavMouseUp}
-               onMouseLeave={handleNavMouseLeave}
-               style={{ 
-                 backgroundColor: activeTab === 'Dashboard' ? '#8a2be2' : 'transparent',
-                 color: '#ffffff', 
-                 textDecoration: 'none', 
-                 fontSize: '18px', 
-                 cursor: 'pointer',
-                 padding: '8px 16px',
-                 borderRadius: '8px',
-                 transition: 'all 0.1s ease',
-                 border: activeTab === 'Dashboard' ? 'none' : '1px solid #8a2be2',
-                 display: 'inline-block'
-               }}>Dashboard</a>
-            <a href="#" 
-               onClick={() => handleNavClick('Facilities')}
-               onMouseDown={handleNavMouseDown}
-               onMouseUp={handleNavMouseUp}
-               onMouseLeave={handleNavMouseLeave}
-               style={{ 
-                 backgroundColor: activeTab === 'Facilities' ? '#8a2be2' : 'transparent',
-                 color: '#ffffff', 
-                 textDecoration: 'none', 
-                 fontSize: '18px', 
-                 cursor: 'pointer',
-                 padding: '8px 16px',
-                 borderRadius: '8px',
-                 transition: 'all 0.1s ease',
-                 border: activeTab === 'Facilities' ? 'none' : '1px solid #8a2be2',
-                 display: 'inline-block'
-               }}>Facilities</a>
-            <a href="#" 
-               onClick={() => handleNavClick('Bookings')}
-               onMouseDown={handleNavMouseDown}
-               onMouseUp={handleNavMouseUp}
-               onMouseLeave={handleNavMouseLeave}
-               style={{ 
-                 backgroundColor: activeTab === 'Bookings' ? '#8a2be2' : 'transparent',
-                 color: '#ffffff', 
-                 textDecoration: 'none', 
-                 fontSize: '18px', 
-                 cursor: 'pointer',
-                 padding: '8px 16px',
-                 borderRadius: '8px',
-                 transition: 'all 0.1s ease',
-                 border: activeTab === 'Bookings' ? 'none' : '1px solid #8a2be2',
-                 display: 'inline-block'
-               }}>Bookings</a>
-            <a href="#" 
-               onClick={() => handleNavClick('Maintenance')}
-               onMouseDown={handleNavMouseDown}
-               onMouseUp={handleNavMouseUp}
-               onMouseLeave={handleNavMouseLeave}
-               style={{ 
-                 backgroundColor: activeTab === 'Maintenance' ? '#8a2be2' : 'transparent',
-                 color: '#ffffff', 
-                 textDecoration: 'none', 
-                 fontSize: '18px', 
-                 cursor: 'pointer',
-                 padding: '8px 16px',
-                 borderRadius: '8px',
-                 transition: 'all 0.1s ease',
-                 border: activeTab === 'Maintenance' ? 'none' : '1px solid #8a2be2',
-                 display: 'inline-block'
-               }}>Maintenance</a>
-            <button 
-               onClick={handleSignIn}
-               onMouseDown={handleNavMouseDown}
-               onMouseUp={handleNavMouseUp}
-               onMouseLeave={handleNavMouseLeave}
-               style={{
+            <a href="#"
+              onClick={() => handleNavClick('Dashboard')}
+              onMouseDown={handleNavMouseDown}
+              onMouseUp={handleNavMouseUp}
+              onMouseLeave={handleNavMouseLeave}
+              style={{
+                backgroundColor: activeTab === 'Dashboard' ? '#8a2be2' : 'transparent',
+                color: '#ffffff',
+                textDecoration: 'none',
+                fontSize: '18px',
+                cursor: 'pointer',
+                padding: '8px 16px',
+                borderRadius: '8px',
+                transition: 'all 0.1s ease',
+                border: activeTab === 'Dashboard' ? 'none' : '1px solid #8a2be2',
+                display: 'inline-block'
+              }}>Dashboard</a>
+            <a href="#"
+              onClick={() => handleNavClick('Facilities')}
+              onMouseDown={handleNavMouseDown}
+              onMouseUp={handleNavMouseUp}
+              onMouseLeave={handleNavMouseLeave}
+              style={{
+                backgroundColor: activeTab === 'Facilities' ? '#8a2be2' : 'transparent',
+                color: '#ffffff',
+                textDecoration: 'none',
+                fontSize: '18px',
+                cursor: 'pointer',
+                padding: '8px 16px',
+                borderRadius: '8px',
+                transition: 'all 0.1s ease',
+                border: activeTab === 'Facilities' ? 'none' : '1px solid #8a2be2',
+                display: 'inline-block'
+              }}>Facilities</a>
+            <a href="#"
+              onClick={() => handleNavClick('Bookings')}
+              onMouseDown={handleNavMouseDown}
+              onMouseUp={handleNavMouseUp}
+              onMouseLeave={handleNavMouseLeave}
+              style={{
+                backgroundColor: activeTab === 'Bookings' ? '#8a2be2' : 'transparent',
+                color: '#ffffff',
+                textDecoration: 'none',
+                fontSize: '18px',
+                cursor: 'pointer',
+                padding: '8px 16px',
+                borderRadius: '8px',
+                transition: 'all 0.1s ease',
+                border: activeTab === 'Bookings' ? 'none' : '1px solid #8a2be2',
+                display: 'inline-block'
+              }}>Bookings</a>
+            <a href="#"
+              onClick={() => handleNavClick('Maintenance')}
+              onMouseDown={handleNavMouseDown}
+              onMouseUp={handleNavMouseUp}
+              onMouseLeave={handleNavMouseLeave}
+              style={{
+                backgroundColor: activeTab === 'Maintenance' ? '#8a2be2' : 'transparent',
+                color: '#ffffff',
+                textDecoration: 'none',
+                fontSize: '18px',
+                cursor: 'pointer',
+                padding: '8px 16px',
+                borderRadius: '8px',
+                transition: 'all 0.1s ease',
+                border: activeTab === 'Maintenance' ? 'none' : '1px solid #8a2be2',
+                display: 'inline-block'
+              }}>Maintenance</a>
+            <button
+              onClick={handleSignIn}
+              onMouseDown={handleNavMouseDown}
+              onMouseUp={handleNavMouseUp}
+              onMouseLeave={handleNavMouseLeave}
+              style={{
                 backgroundColor: '#ffffff',
                 color: '#6a0dad',
                 padding: '10px 20px',
@@ -377,7 +392,7 @@ export default function App() {
             gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
             gap: '32px'
           }}>
-            <div style={{ 
+            <div style={{
               textAlign: 'center',
               backgroundColor: '#ffffff',
               padding: '32px 24px',
@@ -385,10 +400,10 @@ export default function App() {
               border: '1px solid #e5e7eb',
               boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)'
             }}>
-              <div style={{ 
-                fontSize: '48px', 
-                fontWeight: 'bold', 
-                color: '#111827', 
+              <div style={{
+                fontSize: '48px',
+                fontWeight: 'bold',
+                color: '#111827',
                 marginBottom: '16px',
                 display: 'flex',
                 alignItems: 'center',
@@ -400,7 +415,7 @@ export default function App() {
               </div>
               <div style={{ color: '#4b5563', fontSize: '16px', fontWeight: '500' }}>Facilities available</div>
             </div>
-            <div style={{ 
+            <div style={{
               textAlign: 'center',
               backgroundColor: '#ffffff',
               padding: '32px 24px',
@@ -408,10 +423,10 @@ export default function App() {
               border: '1px solid #e5e7eb',
               boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)'
             }}>
-              <div style={{ 
-                fontSize: '48px', 
-                fontWeight: 'bold', 
-                color: '#111827', 
+              <div style={{
+                fontSize: '48px',
+                fontWeight: 'bold',
+                color: '#111827',
                 marginBottom: '16px',
                 display: 'flex',
                 alignItems: 'center',
@@ -423,7 +438,7 @@ export default function App() {
               </div>
               <div style={{ color: '#4b5563', fontSize: '16px', fontWeight: '500' }}>Bookings this month</div>
             </div>
-            <div style={{ 
+            <div style={{
               textAlign: 'center',
               backgroundColor: '#ffffff',
               padding: '32px 24px',
@@ -431,10 +446,10 @@ export default function App() {
               border: '1px solid #e5e7eb',
               boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)'
             }}>
-              <div style={{ 
-                fontSize: '48px', 
-                fontWeight: 'bold', 
-                color: '#111827', 
+              <div style={{
+                fontSize: '48px',
+                fontWeight: 'bold',
+                color: '#111827',
                 marginBottom: '16px',
                 display: 'flex',
                 alignItems: 'center',
@@ -446,7 +461,7 @@ export default function App() {
               </div>
               <div style={{ color: '#4b5563', fontSize: '16px', fontWeight: '500' }}>Issue resolution rate</div>
             </div>
-            <div style={{ 
+            <div style={{
               textAlign: 'center',
               backgroundColor: '#ffffff',
               padding: '32px 24px',
@@ -454,10 +469,10 @@ export default function App() {
               border: '1px solid #e5e7eb',
               boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)'
             }}>
-              <div style={{ 
-                fontSize: '48px', 
-                fontWeight: 'bold', 
-                color: '#111827', 
+              <div style={{
+                fontSize: '48px',
+                fontWeight: 'bold',
+                color: '#111827',
                 marginBottom: '16px',
                 display: 'flex',
                 alignItems: 'center',
@@ -488,15 +503,17 @@ export default function App() {
           <p style={{ fontSize: '18px', color: '#6b7280', marginBottom: '32px' }}>
             Join hundreds of staff and students already using Smart Campus for their daily operations
           </p>
-          <button style={{
-            backgroundColor: '#334155',
-            color: '#ffffff',
-            padding: '12px 32px',
-            borderRadius: '8px',
-            border: 'none',
-            cursor: 'pointer',
-            fontSize: '16px'
-          }}>Sign up with Google</button>
+          <button
+            onClick={() => window.location.href = 'http://localhost:8082/oauth2/authorization/google'}
+            style={{
+              backgroundColor: '#334155',
+              color: '#ffffff',
+              padding: '12px 32px',
+              borderRadius: '8px',
+              border: 'none',
+              cursor: 'pointer',
+              fontSize: '16px'
+            }}>Login with Google</button>
         </div>
       </section>
 

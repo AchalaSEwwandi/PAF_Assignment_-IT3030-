@@ -11,6 +11,7 @@ export default function Register({ setCurrentPage }) {
     role: 'Student'
   });
   const [errors, setErrors] = useState({});
+  const [submitError, setSubmitError] = useState('');
 
   const handlePasswordChange = (e) => {
     const newPassword = e.target.value;
@@ -79,6 +80,8 @@ export default function Register({ setCurrentPage }) {
     return;
   }
 
+  setSubmitError('');
+
   try {
     const res = await fetch('http://localhost:8082/api/auth/register', {
       method: 'POST',
@@ -96,17 +99,23 @@ export default function Register({ setCurrentPage }) {
     const data = await res.json();
 
     if (res.ok) {
-      if (formData.role === 'Student') {
-        alert("Registered successfully. You can now sign in.");
+      if (formData.role.toLowerCase() === 'student') {
+        alert("Student registered successfully! You can now use your email and password to log in to the Student Dashboard.");
+      } else if (formData.role.toLowerCase() === 'lecturer') {
+        alert("Lecturer registered successfully! Please wait for the Admin to approve your account before you can log in to your dashboard.");
+      } else if (formData.role.toLowerCase() === 'technician') {
+        alert("Technician registered successfully! Please wait for the Admin to approve your account before you can log in to your dashboard.");
       } else {
         alert("Registered successfully. Wait for admin approval.");
       }
       setCurrentPage('signin');
     } else {
+      setSubmitError(data.message || "Registration failed");
       alert(data.message || "Registration failed");
     }
   } catch (err) {
     console.error(err);
+    setSubmitError("Server error. Please ensure the backend is running.");
     alert("Server error");
   }
 };
@@ -344,6 +353,21 @@ export default function Register({ setCurrentPage }) {
               <option value="Technician">Technician</option>
             </select>
           </div>
+
+          {submitError && (
+            <div style={{
+              backgroundColor: '#fee2e2',
+              color: '#ef4444',
+              padding: '12px',
+              borderRadius: '8px',
+              marginBottom: '16px',
+              fontSize: '14px',
+              textAlign: 'center',
+              border: '1px solid #f87171'
+            }}>
+              {submitError}
+            </div>
+          )}
 
           <button
             onClick={handleRegister}
